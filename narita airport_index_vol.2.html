@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Narita Airport Train Guide</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f7fb;
+color:#222;
+}
+
+/* header */
+
+header{
+background:#0a3d62;
+color:white;
+padding:30px 30px 40px 30px;
+position:relative;
+}
+
+/* タイトルが言語ボタンと被らないように */
+
+header h1{
+margin:0;
+font-size:32px;
+padding-right:160px;
+}
+
+header p{
+margin-top:6px;
+opacity:0.9;
+padding-right:160px;
+}
+
+/* language switch */
+
+.language{
+position:absolute;
+top:20px;
+right:20px;
+background:white;
+padding:6px 10px;
+border-radius:30px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* select design */
+
+.language select{
+border:none;
+outline:none;
+background:transparent;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* container */
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:25px;
+}
+
+/* cards */
+
+.card{
+background:white;
+padding:25px;
+margin-top:25px;
+border-radius:10px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card h2{
+margin-top:0;
+color:#0a3d62;
+}
+
+/* table */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#eef2f7;
+}
+
+/* images */
+
+img{
+width:100%;
+border-radius:8px;
+margin-top:12px;
+}
+
+/* map button */
+
+.mapbtn{
+display:inline-block;
+background:#27ae60;
+color:white;
+padding:12px 18px;
+border-radius:6px;
+text-decoration:none;
+font-weight:bold;
+margin-top:10px;
+transition:0.2s;
+}
+
+.mapbtn:hover{
+background:#219150;
+transform:translateY(-2px);
+}
+
+footer{
+text-align:center;
+padding:30px;
+color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1 id="title"></h1>
+<p id="subtitle"></p>
+
+<div class="language">
+<select onchange="setLang(this.value)">
+<option value="ar">العربية</option>
+<option value="en">English</option>
+<option value="ja">日本語</option>
+</select>
+</div>
+
+</header>
+
+
+<div class="container">
+
+<!-- TIME -->
+
+<div class="card">
+<h2 id="time_title"></h2>
+<p id="time_text"></p>
+</div>
+
+
+<!-- TRANSPORT -->
+
+<div class="card">
+
+<h2 id="transport_title"></h2>
+
+<table>
+
+<tr>
+<th id="t1"></th>
+<th id="t2"></th>
+<th id="t3"></th>
+<th id="t4"></th>
+<th id="t5"></th>
+<th id="t6"></th>
+</tr>
+
+<tr>
+<td>Narita Express</td>
+<td>60 min</td>
+<td>3000¥</td>
+<td>Yes</td>
+<td>0</td>
+<td id="nex"></td>
+</tr>
+
+<tr>
+<td>Skyliner</td>
+<td>40 min</td>
+<td>2500¥</td>
+<td>Optional</td>
+<td>1</td>
+<td id="sky"></td>
+</tr>
+
+<tr>
+<td>Keisei Line</td>
+<td>90 min</td>
+<td>1300¥</td>
+<td>No</td>
+<td>1-2</td>
+<td id="kei"></td>
+</tr>
+
+<tr>
+<td>Airport Bus</td>
+<td>90 min</td>
+<td>1300¥</td>
+<td>No</td>
+<td>0</td>
+<td id="bus"></td>
+</tr>
+
+</table>
+
+</div>
+
+
+<!-- MAP -->
+
+<div class="card">
+
+<h2 id="map_title"></h2>
+<p id="map_text"></p>
+
+<a class="mapbtn"
+href="https://www.google.com/maps/dir/?api=1&destination=Tokyo+Station"
+target="_blank">
+
+Google Maps
+
+</a>
+
+</div>
+
+
+<!-- STATIONS -->
+
+<div class="card">
+
+<h2 id="station_title"></h2>
+<p id="station_text"></p>
+
+<img src="路線図.png">
+
+</div>
+
+
+<!-- TERMINAL 1 -->
+
+<div class="card">
+
+<h2 id="t1_title"></h2>
+<p id="t1_text"></p>
+
+<img src="terminal1.jpg">
+
+</div>
+
+
+<!-- TERMINAL 2 -->
+
+<div class="card">
+
+<h2 id="t2_title"></h2>
+<p id="t2_text"></p>
+
+<img src="terminal2.png">
+
+</div>
+
+
+<!-- TERMINAL 3 -->
+
+<div class="card">
+
+<h2 id="t3_title"></h2>
+<p id="t3_text"></p>
+
+<img src="terminal3.png">
+
+</div>
+
+
+<!-- PRAYER ROOM -->
+
+<div class="card">
+
+<h2 id="prayer_title"></h2>
+
+<p id="prayer_text"></p>
+
+<img src="prayer.jpg">
+
+</div>
+
+</div>
+
+<footer>
+Narita Airport Travel Guide
+</footer>
+
+
+
+<script>
+
+const text={
+
+ar:{
+
+title:"دليل قطارات مطار ناريتا",
+subtitle:"كيفية الوصول من مطار ناريتا إلى طوكيو",
+
+time_title:"الوقت المتوقع للوصول إلى القطار",
+time_text:"الهجرة واستلام الأمتعة 30–60 دقيقة. المشي إلى المحطة 5–10 دقائق. شراء التذكرة 3–5 دقائق.",
+
+transport_title:"خيارات النقل",
+
+t1:"النقل",
+t2:"الوقت",
+t3:"السعر",
+t4:"الحجز",
+t5:"التحويل",
+t6:"ملاحظات",
+
+nex:"مباشر إلى طوكيو",
+sky:"الأسرع",
+kei:"الأرخص",
+bus:"مناسب مع الأمتعة",
+
+map_title:"البحث عن الطريق إلى طوكيو",
+map_text:"يمكنك فتح الطريق مباشرة في Google Maps.",
+
+station_title:"مواقع محطات القطار",
+station_text:"المبنى 1 → Narita Airport Station. المبنى 2 → Terminal 2 Station. المبنى 3 → المشي إلى المبنى 2.",
+
+t1_title:"المبنى 1 إلى محطة القطار",
+t1_text:"اتبع لافتات Train إلى الطابق B1.",
+
+t2_title:"المبنى 2 إلى محطة القطار",
+t2_text:"من صالة الوصول اتبع Train / Railway.",
+
+t3_title:"المبنى 3 إلى المبنى 2",
+t3_text:"المشي حوالي 650 متر (15 دقيقة).",
+
+prayer_title:"غرفة الصلاة",
+
+prayer_text:"يوجد في مطار ناريتا غرف صلاة في جميع المباني الثلاثة. تحتوي الغرف على اتجاه القبلة ومكان للوضوء ومساحات منفصلة للرجال والنساء."
+
+},
+
+en:{
+
+title:"Narita Airport Train Guide",
+subtitle:"How to get from Narita Airport to Tokyo",
+
+time_title:"Estimated time to reach the train",
+time_text:"Immigration and baggage: 30–60 min. Walk to station: 5–10 min. Ticket purchase: 3–5 min.",
+
+transport_title:"Transport options",
+
+t1:"Transport",
+t2:"Time",
+t3:"Price",
+t4:"Reservation",
+t5:"Transfers",
+t6:"Notes",
+
+nex:"Direct to Tokyo",
+sky:"Fastest",
+kei:"Cheapest",
+bus:"Good with luggage",
+
+map_title:"Find route to Tokyo",
+map_text:"Open route directly in Google Maps.",
+
+station_title:"Train station locations",
+station_text:"Terminal 1 → Narita Airport Station. Terminal 2 → Airport Terminal 2 Station. Terminal 3 → Walk to Terminal 2.",
+
+t1_title:"Terminal 1 → Train station",
+t1_text:"Follow signs for Train to B1 floor.",
+
+t2_title:"Terminal 2 → Train station",
+t2_text:"Follow signs Train / Railway.",
+
+t3_title:"Terminal 3 → Walk to Terminal 2",
+t3_text:"About 650m walk (15 minutes).",
+
+prayer_title:"Prayer Room",
+
+prayer_text:"Narita Airport provides prayer rooms in all terminals."
+
+},
+
+ja:{
+
+title:"成田空港 電車ガイド",
+subtitle:"成田空港から東京への行き方",
+
+time_title:"到着から電車までの目安時間",
+time_text:"入国・荷物受取 30〜60分 / 駅まで徒歩5〜10分 / 切符購入3〜5分",
+
+transport_title:"交通手段",
+
+t1:"交通",
+t2:"時間",
+t3:"料金",
+t4:"予約",
+t5:"乗換",
+t6:"特徴",
+
+nex:"東京直通",
+sky:"最速",
+kei:"最安",
+bus:"荷物が多い人向け",
+
+map_title:"東京までのルート検索",
+map_text:"Google Mapsでルートを確認できます",
+
+station_title:"駅の場所",
+station_text:"第1ターミナル → 成田空港駅 / 第2ターミナル → 空港第2ビル駅 / 第3ターミナル → 徒歩で第2へ",
+
+t1_title:"第1ターミナル → 駅",
+t1_text:"Trainの案内に従いB1へ",
+
+t2_title:"第2ターミナル → 駅",
+t2_text:"Train / Railway表示に従う",
+
+t3_title:"第3ターミナル → 第2へ徒歩",
+t3_text:"約650m（15分）",
+
+prayer_title:"礼拝室",
+
+prayer_text:"成田空港には各ターミナルに礼拝室があります。"
+
+}
+
+};
+
+
+function setLang(lang){
+
+for(const key in text[lang]){
+if(document.getElementById(key)){
+document.getElementById(key).innerText=text[lang][key]
+}
+}
+
+if(lang==="ar"){
+document.body.dir="rtl"
+}else{
+document.body.dir="ltr"
+}
+
+}
+
+setLang("ar")
+
+</script>
+
+</body>
+</html>
